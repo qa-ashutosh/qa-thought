@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>QA Thought of the Day | Ashutosh Parihar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Syne+Mono&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0E0E12;
+    --surface: #13131A;
+    --panel: #18181F;
+    --border: #1E1E28;
+    --border2: #2a2a40;
+    --purple: #7B61FF;
+    --purple-soft: #B8A8FF;
+    --purple-dim: #7B61FF18;
+    --text-primary: #E8E8F4;
+    --text-muted: #9090B0;
+    --text-dim: #3a3a52;
+    --text-faint: #252535;
+    --font: 'Syne', sans-serif;
+    --mono: 'Syne Mono', monospace;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px 60px;
+  }
+
+  .page-wrap {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page-top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .page-top-left {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+
+  .page-top-right {
+    font-size: 9px;
+    color: var(--text-faint);
+    letter-spacing: 0.1em;
+    font-family: var(--mono);
+  }
+
+  .page-top-right span { color: var(--purple); opacity: 0.6; }
+
+  .card {
+    width: 100%;
+    background: var(--bg);
+    border: 0.5px solid var(--border2);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .card-head {
+    background: var(--surface);
+    padding: 15px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .head-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+
+  .head-tag {
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    font-family: var(--mono);
+  }
+
+  .card-body {
+    padding: 52px 52px 40px;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+
+  .ey-line {
+    height: 1px;
+    width: 32px;
+    background: var(--border2);
+  }
+
+  .ey-text {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+
+  .quote {
+    font-family: var(--font);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.48;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .quote.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .dot-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 52px 22px;
+  }
+
+  .ddot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+  }
+
+  .ddot.active {
+    background: var(--purple);
+    width: 22px;
+    border-radius: 3px;
+  }
+
+  .ddot.seen { background: var(--text-dim); }
+
+  .card-foot {
+    padding: 20px 52px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .author { display: flex; flex-direction: column; gap: 4px; }
+
+  .a-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .a-role {
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    font-family: var(--mono);
+    text-transform: uppercase;
+  }
+
+  .navs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nbtn {
+    background: transparent;
+    border: 0.5px solid var(--border2);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-size: 14px;
+    font-family: var(--font);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .nbtn:hover { border-color: var(--purple); color: var(--purple-soft); }
+
+  .nctr {
+    font-size: 10px;
+    color: var(--text-faint);
+    min-width: 44px;
+    text-align: center;
+    letter-spacing: 0.08em;
+    font-family: var(--mono);
+  }
+
+  .page-links {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 24px;
+    font-size: 10px;
+    color: var(--text-faint);
+    font-family: var(--mono);
+    letter-spacing: 0.06em;
+  }
+
+  .page-links a {
+    color: var(--purple);
+    text-decoration: none;
+    opacity: 0.35;
+    transition: opacity 0.15s;
+  }
+
+  .page-links a:hover { opacity: 0.85; }
+
+  .sep { color: var(--text-faint); opacity: 0.3; }
+
+  @media (max-width: 520px) {
+    .card-body { padding: 36px 28px 28px; }
+    .card-foot { padding: 18px 28px 22px; }
+    .dot-row { padding: 0 28px 18px; }
+    .card-head { padding: 13px 20px; }
+    .quote { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <div class="page-top">
+    <span class="page-top-left">ashutosh parihar</span>
+    <span class="page-top-right">thought <span id="top-num">01</span> of 40</span>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="head-label">qa thought of the day</span>
+      <span class="head-tag" id="head-date">loading...</span>
+    </div>
+
+    <div class="card-body">
+      <div class="eyebrow">
+        <div class="ey-line"></div>
+        <span class="ey-text">daily signal from the quality layer</span>
+      </div>
+      <p class="quote" id="quote-el">loading...</p>
+    </div>
+
+    <div class="dot-row" id="dot-row"></div>
+
+    <div class="card-foot">
+      <div class="author">
+        <span class="a-name">Ashutosh Parihar</span>
+        <span class="a-role">Quality Engineering Architect</span>
+      </div>
+      <div class="navs">
+        <button class="nbtn" onclick="navigate(-1)" aria-label="previous">&#8592;</button>
+        <span class="nctr" id="nav-ctr">1 / 40</span>
+        <button class="nbtn" onclick="navigate(1)" aria-label="next">&#8594;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-links">
+    <a href="https://github.com/qa-ashutosh" target="_blank" rel="noopener">github</a>
+    <span class="sep">|</span>
+    <a href="https://linkedin.com/in/ashutosh-parihar" target="_blank" rel="noopener">linkedin</a>
+    <span class="sep">|</span>
+    <a href="https://qa-ashutosh.github.io/quality-risk-radar" target="_blank" rel="noopener">quality risk radar</a>
+    <span class="sep">|</span>
+    <a href="mailto:workwith.ashutosh3@gmail.com">contact</a>
+  </div>
+
+</div>
+
+<script>
+var QUOTES = [
+  "Coverage percentage is a vanity metric. Mutation score is the truth.",
+  "If your test suite takes 40 minutes, it is not a safety net. It is a delay.",
+  "The best QA hire is the one who makes developers afraid to skip writing tests.",
+  "Flaky tests are not a test problem. They are a trust problem.",
+  "A bug found in production is not a test failure. It is an architecture failure.",
+  "Shift left does not mean write tests earlier. It means think about failure earlier.",
+  "If QA joins at sprint review, QA is a checkpoint. If QA joins at sprint planning, QA is a partner.",
+  "Your E2E suite is not documentation. Your contract tests are.",
+  "Every mock you write is a bet that the real dependency behaves the same way. Most bets lose.",
+  "Test infrastructure is production infrastructure. Treat it that way.",
+  "The cost of a bug doubles with every layer it crosses before detection.",
+  "A passing pipeline that nobody trusts is worse than a failing one that everyone reads.",
+  "You do not have a testing problem. You have a feedback loop problem.",
+  "Observability is QA in production. If you are not measuring it, you are not testing it.",
+  "The hardest bug to find is the one your test suite is specifically designed to miss.",
+  "Manual testing is not the enemy. Undocumented manual testing is.",
+  "If developers own quality, QA architects the system that makes ownership possible.",
+  "A test that never fails has never been trusted.",
+  "Performance testing after feature freeze is not testing. It is hoping.",
+  "Contract tests are cheap. Integration incidents are not.",
+  "The worst kind of test is one that passes for the wrong reason.",
+  "Automation without strategy is just scheduled disappointment.",
+  "Your staging environment is only as useful as its distance from production.",
+  "A QA engineer who cannot explain risk in business terms cannot influence architecture.",
+  "The definition of done should include the definition of observable.",
+  "Retry logic in tests does not fix flakiness. It hides it.",
+  "If your tests are hard to write, your code is hard to change.",
+  "Load testing at average traffic finds nothing. Load testing at peak finds everything.",
+  "The most expensive test is the one you did not write before the incident.",
+  "A test pyramid with no contract layer is a test pyramid with a missing floor.",
+  "Speed of delivery without quality signal is just speed of failure.",
+  "The goal is not zero bugs. The goal is zero surprises.",
+  "Every undocumented edge case is a future incident waiting for its trigger.",
+  "QA is not a phase at the end of the pipeline. It is a property of the pipeline itself.",
+  "If your test data is not production-like, your test results are not production-relevant.",
+  "The best test is the one that runs in the environment closest to where the bug will live.",
+  "Chaos engineering is just honest acknowledgment that your system will fail.",
+  "A rollback plan is a test case for your deployment strategy.",
+  "The absence of test failures is not evidence of quality. It is evidence of test coverage.",
+  "Technical debt in test code costs more than technical debt in product code. It compounds faster."
+];
+
+var DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var current = 0;
+var seen = [];
+
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+function getDayIndex() {
+  var start = new Date('2025-01-01').getTime();
+  var now = new Date().getTime();
+  return Math.floor((now - start) / 86400000) % QUOTES.length;
+}
+
+function formatDate() {
+  var d = new Date();
+  return DAYS[d.getDay()] + ' ' + pad(d.getDate()) + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+}
+
+function buildDots() {
+  var row = document.getElementById('dot-row');
+  row.innerHTML = '';
+  for (var i = 0; i < QUOTES.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'ddot';
+    d.setAttribute('aria-label', 'thought ' + (i + 1));
+    d.addEventListener('click', (function(idx) {
+      return function() { goTo(idx); };
+    })(i));
+    row.appendChild(d);
+  }
+}
+
+function updateDots() {
+  document.querySelectorAll('.ddot').forEach(function(d, i) {
+    d.classList.remove('active', 'seen');
+    if (i === current) d.classList.add('active');
+    else if (seen.indexOf(i) !== -1) d.classList.add('seen');
+  });
+}
+
+function showQuote(idx) {
+  var el = document.getElementById('quote-el');
+  el.classList.remove('visible');
+  setTimeout(function() {
+    el.textContent = QUOTES[idx];
+    el.classList.add('visible');
+  }, 110);
+  var n = idx + 1;
+  document.getElementById('top-num').textContent = pad(n);
+  document.getElementById('nav-ctr').textContent = n + ' / ' + QUOTES.length;
+  if (seen.indexOf(idx) === -1) seen.push(idx);
+  updateDots();
+}
+
+function navigate(dir) {
+  current = (current + dir + QUOTES.length) % QUOTES.length;
+  showQuote(current);
+}
+
+function goTo(idx) {
+  current = idx;
+  showQuote(current);
+}
+
+document.getElementById('head-date').textContent = formatDate();
+buildDots();
+current = getDayIndex();
+showQuote(current);
+</script>
+</body>
+</html>
